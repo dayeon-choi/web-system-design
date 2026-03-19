@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[최다연] - 사용자 등록</title>
+</head>
+
+<body>
+  <header>
+    <h1>사용자 등록</h1>
+  </header>
+
+  <main>
+    <form>
+      <fieldset>
+        <legend>기본 정보 (Essential)</legend><br />
+
+        <label for="userId">아이디:</label><br />
+        <input type="text" id="userId" placeholder="4~12자 영문/숫자" minlength="4" maxlength="12" pattern="[a-zA-Z0-9]+"
+          autofocus required>
+        <br /><br />
+
+        <label for="password">비밀번호:</label><br />
+        <input type="password" id="password" minlength="1" maxlength="20" required>
+        <br /><br />
+
+        <label for="email">이메일:</label><br />
+        <input type="text" id="email" minlength="1" required>
+        <br /><br />
+      </fieldset><br />
+
+      <fieldset>
+        <legend>부가 정보 (Optional)</legend><br />
+
+        <label for="phone">연락처:</label><br />
+        <input type="tel" id="phone" placeholder="010-1234-5678" pattern="01[016789]-[0-9]{3,4}-[0-9]{4}">
+        <br /><br />
+
+        <label>관심 분야:</label><br />
+        <input type="checkbox" id="html5" name="HTML5">
+        <label for="html5">HTML5</label>
+        <input type="checkbox" id="css3" name="CSS3">
+        <label for="css3">CSS3</label>
+        <input type="checkbox" id="javascript" name="JavaScript">
+        <label for="javascript">JavaScript</label>
+        <br /><br />
+
+        <label for="proficiency">숙련도:</label>
+        <input type="range" id="proficiency" value="50" step="10" min="0" max="100"><br />
+        <br /><br />
+      </fieldset>
+
+      <br />
+      <input type="submit" value="가입 신청">
+      <input type="reset" value="초기화">
+    </form>
+  </main>
+
+  <footer>
+    <section>
+      <nav>
+        <div>
+          <a href="index.html">
+            <p>홈으로</p>
+          </a>
+        </div>
+      </nav>
+    </section>
+
+    <section>
+      <p>&copy; 2026 Web Programming Course. All rights reserved.</p>
+    </section>
+  </footer>
+
+</body>
+
+</html>
