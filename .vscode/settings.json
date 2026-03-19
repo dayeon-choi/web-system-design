@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "[html]": { 
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.html-language-features" 
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  }, 
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },  
+}
