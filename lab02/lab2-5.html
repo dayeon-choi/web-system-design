@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-	<meta charset="UTF-8">
-	<title>실습 2-5</title>
+  <meta charset="UTF-8">
+  <title>실습 2-5</title>
+  <style>
+    .image-cell {
+      background-image: url('cherry-blossom.jpg');
+      background-size: cover;
+    }
+
+    table,
+    th,
+    td {
+      padding: 20px;
+      border: 1px solid darkgray;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th {
+      width: 10rem;
+      background-color: #ffcfcf;
+    }
+
+    caption {
+      padding: 10px 0;
+      caption-side: bottom;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
-  <table border="1">
+  <table>
     <caption>2023 국민 독서실태</caption>
     <thead>
       <tr>
@@ -18,7 +46,7 @@
       <tr>
         <th>종이책</th>
         <td>6.1권</td>
-        <td>11.8권</td>
+        <td class="image-cell">11.8권</td>
       </tr>
       <tr>
         <th>전자책</th>
@@ -29,8 +57,9 @@
         <th>오디오북</th>
         <td>0.2권</td>
         <td>5.5권</td>
-      </tr>      
+      </tr>
     </tbody>
   </table>
 </body>
+
 </html>
