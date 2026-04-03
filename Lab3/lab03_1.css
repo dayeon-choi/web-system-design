@@ -1,0 +1,261 @@
+/* 페이지 내 공통 스타일 */
+
+* {
+  width: stretch;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style-type: none;
+}
+
+body {
+  padding: 0 40px 20px;
+}
+
+.text-color--white,
+li, li > a {
+  color: white;
+}
+
+
+/* 컨텐츠 스타일 */
+
+#wrap {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-areas:
+    "header header header"
+    "left main right"
+    "footer footer footer";
+  gap: 12px;
+}
+
+#top_header {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-area: header;
+  align-items: end;
+
+  height: 120px;
+  padding: 0 20px 12px;
+  background-color: #003087;
+}
+
+#title > h1 {
+  padding: 20px 0;
+}
+
+#navi {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-weight: bold;
+}
+
+#navi > li {
+  position : relative;
+  float: left;
+  padding: 8px 16px;
+  text-align: center;
+}
+
+#navi > li > ul {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  position : absolute;
+  top: 36px;
+  z-index : 10;
+
+  padding: 12px 0;
+  background-color: #003087;
+  box-shadow: #011c4f 0px 5px 8px;
+  border-radius: 8px;
+  opacity: 0.9;
+}
+
+#navi > li:hover {
+  background-color: white;
+}
+
+#navi > li:hover > a {
+  color: #003087;
+}
+
+#navi > li:hover > ul {
+  display: inline-flex;
+}
+
+#navi > li > ul > li {
+  padding: 4px 0;
+}
+
+#navi > li > ul > li:hover {
+  background-color: #021e51;
+}
+
+#login {
+  grid-area: left;
+  padding: 12px 8px;
+  background-color: #003087;
+}
+
+#login > form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+}
+
+#login > form > * {
+  grid-column: 1 / 3;
+  vertical-align: center;
+  height: 24px;
+  line-height: 32px;
+}
+
+#login > form > input[type="submit"] {
+  grid-column: 1 / 2;
+}
+
+#login > form > input[type="button"] {
+  grid-column: 2 / 3;
+}
+
+#ad {
+  display: inline-flex;
+  flex-direction: column;
+  grid-area: right;
+  gap: 12px 0;
+}
+
+#post {
+  display: grid;
+  grid-area: main;
+  gap: 12px 0;
+
+  font-weight: bold;
+}
+
+#foot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  grid-area: footer;
+
+  height: 40px;
+  padding: 0 8px;
+  background-color: #003087;
+  color: white;
+}
+
+#foot > nav > ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+
+/* 컴포넌트 스타일 */
+
+.card {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 24px 4fr;
+  grid-template-areas:
+    "title title"
+    "image content";
+  gap: 8px 12px;
+
+  border-radius: 8px;
+  border: 2px solid black;
+  padding: 16px 8px;
+  box-shadow: black 0 2px 8px;
+}
+
+.card > header {
+  grid-area: title;
+}
+
+.card > figure {
+  grid-area: image;
+}
+
+.card > figure > img {
+  width: 250px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card > p {
+  grid-area: content;
+}
+
+.small-card {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: left;
+
+  background-color: rgb(253, 226, 168);
+  border-radius: 8px;
+  border: 2px solid #003087;
+  padding: 16px 8px;
+}
+
+.small-card > p > img {
+  width: 170px;
+  height: 60px;
+}
+
+
+/* 미디어쿼리 */
+
+@media screen and (max-width: 1000px) {
+  #top_header,
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card > figure > img {
+    width: 100%;
+    height: 300px;
+  }
+
+  #top_header,
+  .card {
+    padding: 20px 12px;
+  }
+
+  #title {
+    padding: 10px 0;
+  }
+
+  #title > h1 {
+    padding: 0 0 8px;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  body {
+    padding: 0;
+  }
+
+  #wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #login {
+    padding: 20px 12px;
+  }
+
+  #post,
+  #ad {
+    padding: 0 12px;
+  }
+}

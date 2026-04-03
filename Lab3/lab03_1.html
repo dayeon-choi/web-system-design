@@ -4,118 +4,126 @@
 <head>
 	<meta charset="utf-8">
 	<title>HTML + CSS 실습 5</title>
+	<link rel="stylesheet" href="lab03_1.css">
 </head>
 
 <body>
-	<header id="top_header">
-		<hgroup id="title">
-			<h1>큰 제목 작성하기</h1>
-			<p>이 웹 페이지 소 제목 작성하기</p>
-		</hgroup>
-		<nav>
-			<ul id="navi">
-				<li><a href="#">Menu 1 </a>
-					<ul>
-						<li><a href="#">Sub Menu1-1</a></li>
-						<li><a href="#">Sub Menu1-2</a></li>
-					</ul>
-				</li>
-				<li><a href="#">Menu 2 </a>
-					<ul>
-						<li><a href="#">Sub Menu 2-1</a></li>
-						<li><a href="#">Sub Menu 2-2</a></li>
-					</ul>
-				</li>
-				<li><a href="#">Menu 3 </a>
-				</li>
-				<li><a href="#">Menu 4 </a>
-				</li>
+	<!-- body 태그에 display 속성을 바로 적용하는 것은 권장되지 않아 wrap div 추가 -->
+	<div id="wrap">
+		<header id="top_header">
+			<hgroup id="title" class="text-color--white">
+				<h1>SOOKMYUNG 쇼핑몰</h1>
+				<p>감도 높은 취향, 일상을 채우는 SOOKMYUNG 쇼핑몰</p>
+			</hgroup>
+			<nav>
+				<ul id="navi">
+					<li><a href="#">식품</a>
+						<ul>
+							<li><a href="#">가공식품</a></li>
+							<li><a href="#">건강식품</a></li>
+						</ul>
+					</li>
+					<li><a href="#">홈데코</a>
+						<ul>
+							<li><a href="#">주방용품</a></li>
+							<li><a href="#">침구</a></li>
+						</ul>
+					</li>
+					<li><a href="#">의류</a>
+					</li>
+					<li><a href="#">전자제품</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
 
-			</ul>
-		</nav>
-	</header>
+		<aside id="login">
+			<form>
+				<!-- CSS의 레이아웃 정렬로 불필요해진 br 태그 제거했습니다. -->
+				<label for="user" class="text-color--white">아이디</label>
+				<input type="text" id="user" size="15">
+				<label for="pass" class="text-color--white">비밀번호</label>
+				<input type="password" id="pass" size="15">
+				<input type="submit" value="로그인">
+				<input type="button" value="회원가입">
+			</form>
+		</aside>
 
-	<aside id="login">
-		<form>
-			<label for="user">아이디</label>
-			<input type="text" id="user" size="15"><br>
-			<label for="pass">비밀번호</label>
-			<input type="password" id="pass" size="15"><br>
-			<input type="submit" value="로그인">
-			<input type="button" value="회원가입">
-		</form>
-	</aside>
+		<aside id="ad">
+			<article class="small-card">
+				<p>숙명여자대학교</p>
+				<!-- 이미지 사이즈 스타일 코드로 옮겨 제거했습니다. -->
+				<p><img src="sm_logo.png"></p>
+				<p>컴퓨터과학과<br>웹시스템설계</p>
+			</article>
+			<article class="small-card">
+				<p>ABC 쇼핑몰</p>
+				<!-- 이미지 사이즈 스타일 코드로 옮겨 제거했습니다. -->
+				<p><img src="abc_logo.png"></p>
+				<p>10% 할인 이벤트<br> 무료 배송</p>
+			</article>
+		</aside>
 
-	<aside id="ad">
-		<article>
-			<p>숙명여자대학교</p>
-			<p><img src="sm_logo.png" width="170"></p>
-			<p>컴퓨터과학과<br>웹시스템설계</p>
-		</article>
-		<article>
-			<p>ABC 쇼핑몰</p>
-			<p><img src="http://placehold.it/170x60"></p>
-			<p>10% 할인 이벤트<br> 무료 배송</p>
-		</article>
-	</aside>
-
-	<section id="post">
-		<article>
-			<div class="card">
-				<header>
-					<h3>Sub Title 1</h3>
-				</header>
-				<figure>
-					<img src="cup-1.jpg">
-				</figure>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-					magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-					pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-					est laborum.</p>
-			</div>
-		</article>
-		<article>
-			<div class="card">
-				<header>
-					<h3>Sub Title 2</h3>
-				</header>
-				<figure>
-					<img src="cup-2.jpg">
-				</figure>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-					magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-					pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-					est laborum.</p>
-			</div>
-		</article>
-		<article>
-			<div class="card">
-				<header>
-					<h3>Sub Title 3</h3>
-				</header>
-				<figure>
-					<img src="cup-3.jpg">
-				</figure>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-					magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-					pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-					est laborum.</p>
-			</div>
-		</article>
-	</section>
-	<footer>
-		<nav id="foot">
-			<ul>
-				<li><a href="#">회사 소개</a>
-				<li><a href="#">대표이사 인사말</a>
-				<li><a href="#">오시는 길</a>
-				<li><a href="#">광고주를 모집합니다.</a>
-			</ul>
-		</nav>
-	</footer>
+		<section id="post">
+			<article>
+				<div class="card">
+					<header>
+						<h3>봄 내음 가득 블라우스</h3>
+					</header>
+					<figure>
+						<img src="blouse.jpg">
+					</figure>
+					<p>이번 시즌 여성복 컬렉션에서는 조각적인 실루엣과 리치한 컬러 팔레트에 대한 탐구로 완성한 아이템을 선보입니다.
+						부드러운 느낌의 코튼 소재로 만들어진 블라우스로, 패널 디자인과 각진 형태로 마감된 솔기 디테일이 특징입니다.
+						네크라인과 소매 부분을 완성하는 개더 주름 디테일도 함께 확인해 보세요.
+						사랑스럽고 발랄한 분위기를 한 번에 더해주는 포인트 컬러를 선택해 보세요.</p>
+				</div>
+			</article>
+			<article>
+				<div class="card">
+					<header>
+						<h3>감각적인 가방</h3>
+					</header>
+					<figure>
+						<img src="bag.jpg">
+					</figure>
+					<p>내구성, 고급스러움, 실용성을 동시에 갖춘 대표적인 패션 아이템입니다.
+						천 소재나 합성 가죽과 달리, 천연 가죽은 사용할수록 자연스러운 광택과 질감이 살아나 시간이 지날수록 멋이 더해지는 특징이 있습니다.
+						가볍고 편리한 디자인으로 일상 속에서 편리하게 사용할 수 있습니다.
+						특히 고급스러운 디자인으로 인해 많은 사람들에게 사랑받고 있습니다.
+						어떤 무드에나 잘 어울리는 아이템입니다.
+						격조있는 디자인으로 많은 사람들에게 사랑받고 있습니다.</p>
+				</div>
+			</article>
+			<article>
+				<div class="card">
+					<header>
+						<h3>귀여운 리본의 목걸이</h3>
+					</header>
+					<figure>
+						<img src="necklace.jpg">
+					</figure>
+					<p>귀여운 리본 목걸이는 사랑스럽고 발랄한 분위기를 한 번에 더해주는 포인트 액세서리입니다.
+						작은 리본 모양의 펜던트가 목선을 따라 자연스럽게 자리 잡아, 심플한 옷차림에도 여성스럽고 러블리한 무드를 완성해 줍니다.
+						사랑스러운 디자인으로 많은 사람들에게 사랑받고 있습니다.
+						러블리한 무드를 완성해 줍니다.
+						가벼운 무게로 착용하기 편리하며, 알러지 반응이 적습니다.
+						실버부터 골드까지 다양한 컬러로 지금 바로 만나보세요.</p>
+				</div>
+			</article>
+		</section>
+		<!-- : 통일성, 스타일 코드 편의를 위해 id foot 지정 위치를 변경했습니다. -->
+		<footer id="foot">
+			<nav>
+				<ul>
+					<li><a href="#">회사 소개</a>
+					<li><a href="#">대표이사 인사말</a>
+					<li><a href="#">오시는 길</a>
+					<li><a href="#">광고주를 모집합니다.</a>
+				</ul>
+			</nav>
+		</footer>
+	</div>
 </body>
 
 </html>
