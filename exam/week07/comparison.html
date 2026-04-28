@@ -1,0 +1,38 @@
+<script>
+  console.log(300 == "300")
+  console.log(300 === "300")
+
+  function Car(make, model, year) {
+  this.make = make;
+  this.model = model;
+  this.year = year;
+  }
+
+  const auto = new Car("Honda", "Accord", 1998);
+
+  console.log(typeof Car);
+  console.log(auto instanceof Car);
+  // Expected output: true
+
+  console.log(auto instanceof Object);
+  // Expected output: true
+
+  const test = ['a', 'b', 'c']
+
+  for (i in test) {
+    console.log(i)
+  }
+
+  for (v of test) {
+    console.log(v)
+  }
+
+  console.log(test[-1]) // undefined (지원 X)
+  console.log(test.at(-1))
+
+  const result1 = test.splice(1, 1)
+  console.log(test,  result1)
+
+  const result2 = test.splice(0, 1, 1, 2)
+  console.log(test,  result2)
+  </script>
