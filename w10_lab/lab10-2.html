@@ -41,6 +41,14 @@
             border-bottom: 1px solid #eee;
         }
 
+        li.dragging {
+            opacity: 0.4;
+        }
+
+        li.drag-over {
+            background: #f0f8ff;
+        }
+
         .name {
             flex: 1;
             cursor: pointer;
@@ -94,7 +102,7 @@
     <div class="searchbar">
         <input type="text" id="searchInput" placeholder="🔍 검색 (이름 또는 URL)">
     </div>
-    <ul id="bookmarkList"></ul>
+    <div id="bookmarkList"></div>
 
     <script>
         const nameInput = document.querySelector('#nameInput');
@@ -103,6 +111,14 @@
         const addBtn = document.querySelector('#addBtn');
         const list = document.querySelector('#bookmarkList');
         const searchInput = document.querySelector('#searchInput');
+
+        let dragSourceId = null;
+        let dragSourceCategory = null;
+
+        const clearDragOver = () => {
+            list.querySelectorAll('.drag-over')
+                .forEach((el) => el.classList.remove('drag-over'));
+        };
 
         // 데이터 모델: [{ id, name, url, category, starred }, ...]
         let bookmarks = [];
@@ -114,7 +130,7 @@
         // 북마크 항목들을 HTML로 렌더링하는 함수 (단일 리스트)
         const renderItems = (items) => {
             return items.map(({ id, name, url, starred }) => `
-                <li data-id="${id}">
+                <li draggable="true" data-id="${id}">
                     <span class="name">${name}</span>
                     <span class="star ${starred ? 'active' : ''}">★</span>
                     <button class="delete-btn">삭제</button>
@@ -134,21 +150,18 @@
             list.innerHTML = Object.entries(grouped).map(([category, items]) => `
                 <div class="category">
                     <strong>📁 ${category}</strong><hr>
-                    <ul>${renderItems(items)}</ul>
+                    <ul data-category="${category}" class="category-list">${renderItems(items)}</ul>
                 </div>
             `).join('');
         }
 
-        // 북마크 정렬 함수: 즐겨찾기인 항목이 먼저 오도록, 그 다음 id 순으로 정렬
+        // 북마크 정렬 함수: 즐겨찾기인 항목이 먼저 오도록, 동일한 그룹 내에서는 현재 순서를 유지
         const sortBookmarks = () => {
-            bookmarks.sort((a, b) => {
-                if (a.starred === b.starred) return a.id - b.id;
-                return b.starred - a.starred;
-            });
+            bookmarks.sort((a, b) => b.starred - a.starred);
         }
 
-        render();
         sortBookmarks();
+        render();
 
         // 추가 버튼 클릭 이벤트
         addBtn.addEventListener('click', () => {
@@ -229,6 +242,100 @@
                 list.innerHTML = renderItems(filteredBookmarks);
             }
 
+        });
+
+        // 드래그 앤 드롭 관련 함수: 같은 카테고리 내에서 항목 순서 변경
+        const moveBookmarkToCategoryPosition = (sourceId, targetId) => {
+            const sourceIndex = bookmarks.findIndex((bookmark) => bookmark.id === sourceId);
+            const targetIndex = bookmarks.findIndex((bookmark) => bookmark.id === targetId);
+            if (sourceIndex === -1 || targetIndex === -1) return; // 유효하지 않은 ID인 경우 함수 종료
+
+            const [movedBookmark] = bookmarks.splice(sourceIndex, 1);
+            const adjustedTargetIndex = bookmarks.findIndex((bookmark) => bookmark.id === targetId);
+            bookmarks.splice(adjustedTargetIndex, 0, movedBookmark);
+        }
+
+        // 카테고리 끝으로 이동하는 함수: 드롭 위치가 항목이 아닌 카테고리 영역인 경우 해당 카테고리의 마지막으로 이동
+        const moveBookmarkToCategoryEnd = (sourceId, category) => {
+            const sourceIndex = bookmarks.findIndex((bookmark) => bookmark.id === sourceId);
+            if (sourceIndex === -1) return;
+
+            // 이동할 북마크를 배열에서 제거하고, 같은 카테고리 내에서 마지막 위치를 찾아 그 뒤에 삽입
+            const [movedBookmark] = bookmarks.splice(sourceIndex, 1);
+            const targetCategoryBookmark = [...bookmarks].reverse().find((bookmark) => (bookmark.category || '미분류') === category);
+
+            if (targetCategoryBookmark) {
+                const lastIndex = bookmarks.findIndex((bookmark) => bookmark.id === targetCategoryBookmark.id);
+                bookmarks.splice(lastIndex + 1, 0, movedBookmark);
+            } else {
+                bookmarks.push(movedBookmark);
+            }
+        }
+
+        // 드래그 앤 드롭 이벤트 리스너
+        list.addEventListener('dragstart', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const categoryList = li.closest('ul[data-category]');
+            if (!categoryList) return;
+
+            dragSourceId = Number(li.dataset.id);
+            dragSourceCategory = categoryList.dataset.category;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', String(dragSourceId));
+            li.classList.add('dragging');
+        });
+
+        // 드래그 종료 시 드래그 상태 초기화
+        list.addEventListener('dragend', (e) => {
+            const li = e.target.closest('li');
+            if (li) li.classList.remove('dragging');
+
+            clearDragOver();
+            dragSourceId = null;
+            dragSourceCategory = null;
+        });
+
+        // 드래그 오버 이벤트: 같은 카테고리 내에서만 드롭 허용, 드롭 가능한 항목에 시각적 표시
+        list.addEventListener('dragover', (e) => {
+            const categoryList = e.target.closest('ul[data-category]');
+            if (!categoryList || dragSourceCategory !== categoryList.dataset.category) return;
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const li = e.target.closest('li');
+            clearDragOver();
+            if (li) li.classList.add('drag-over');
+        });
+
+        // 드래그가 리스트 영역을 벗어날 때 시각적 표시 제거
+        list.addEventListener('dragleave', (e) => {
+            const li = e.target.closest('li');
+            if (li) li.classList.remove('drag-over');
+        });
+
+        // 드롭 이벤트: 같은 카테고리 내에서 항목 순서 변경 또는 카테고리 끝으로 이동, 변경된 북마크 배열을 localStorage에 저장 후 렌더링
+        list.addEventListener('drop', (e) => {
+            // 드롭 위치가 같은 카테고리인지 확인 (다른 카테고리로의 드롭은 허용 X)
+            const categoryList = e.target.closest('ul[data-category]');
+            if (!categoryList || dragSourceCategory !== categoryList.dataset.category) return;
+            e.preventDefault(); // 드롭 기본 동작 방지
+
+            // 드롭 위치가 항목인지 카테고리 영역인지에 따라 다른 이동 함수 호출
+            const targetLi = e.target.closest('li');
+            if (targetLi) {
+                const targetId = Number(targetLi.dataset.id);
+                // 드롭 위치가 항목인 경우: 같은 카테고리 내에서 순서 변경
+                if (dragSourceId !== null && dragSourceId !== targetId) {
+                    moveBookmarkToCategoryPosition(dragSourceId, targetId);
+                }
+            } else {
+                moveBookmarkToCategoryEnd(dragSourceId, categoryList.dataset.category);
+            }
+
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            sortBookmarks();
+            render();
         });
     </script>
 </body>
