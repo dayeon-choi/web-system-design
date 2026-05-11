@@ -69,6 +69,17 @@
             padding: 0.3rem 0.6rem;
             cursor: pointer;
         }
+
+        .searchbar input {
+            width: -webkit-fill-available;
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
@@ -77,31 +88,32 @@
     <div class="form">
         <input type="text" id="nameInput" placeholder="사이트 이름">
         <input type="url" id="urlInput" placeholder="https://...">
+        <input type="text" id="categoryInput" placeholder="카테고리 (선택)">
         <button id="addBtn">추가</button>
+    </div>
+    <div class="searchbar">
+        <input type="text" id="searchInput" placeholder="🔍 검색 (이름 또는 URL)">
     </div>
     <ul id="bookmarkList"></ul>
 
     <script>
         const nameInput = document.querySelector('#nameInput');
         const urlInput = document.querySelector('#urlInput');
+        const categoryInput = document.querySelector('#categoryInput');
         const addBtn = document.querySelector('#addBtn');
         const list = document.querySelector('#bookmarkList');
+        const searchInput = document.querySelector('#searchInput');
 
-        // 데이터 모델: [{ id, name, url, starred }, ...]
+        // 데이터 모델: [{ id, name, url, category, starred }, ...]
         let bookmarks = [];
 
-        // TODO 1: 페이지 로드 시 localStorage에서 bookmarks 배열 복원 + 렌더링
-        //         힌트: JSON.parse, render() 호출
+        // 초기 데이터 로드: localStorage에서 bookmarks 불러오기 (JSON.parse)
         const savedBookmarks = localStorage.getItem('bookmarks');
-        if (savedBookmarks) {
-            bookmarks = JSON.parse(savedBookmarks);
-        }
-        render();
+        if (savedBookmarks) bookmarks = JSON.parse(savedBookmarks);
 
-        // TODO 2: render() — bookmarks 배열을 화면에 그리기
-        //         힌트: list.innerHTML = bookmarks.map(b => `<li data-id="${b.id}">...</li>`).join('')
-        function render() {
-            list.innerHTML = bookmarks.map(({ id, name, url, starred }) => `
+        // 북마크 항목들을 HTML로 렌더링하는 함수 (단일 리스트)
+        const renderItems = (items) => {
+            return items.map(({ id, name, url, starred }) => `
                 <li data-id="${id}">
                     <span class="name">${name}</span>
                     <span class="star ${starred ? 'active' : ''}">★</span>
@@ -110,42 +122,113 @@
             `).join('');
         }
 
-        // TODO 3: 추가 버튼 — 이름+URL 받아서 bookmarks에 추가 + 저장 + 렌더링
+        // 북마크를 카테고리별로 그룹화해서 렌더링하는 함수
+        const render = () => {
+            const grouped = bookmarks.reduce((acc, bookmark) => {
+                const category = bookmark.category || '미분류';
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(bookmark);
+                return acc;
+            }, {});
+
+            list.innerHTML = Object.entries(grouped).map(([category, items]) => `
+                <div class="category">
+                    <strong>📁 ${category}</strong><hr>
+                    <ul>${renderItems(items)}</ul>
+                </div>
+            `).join('');
+        }
+
+        // 북마크 정렬 함수: 즐겨찾기인 항목이 먼저 오도록, 그 다음 id 순으로 정렬
+        const sortBookmarks = () => {
+            bookmarks.sort((a, b) => {
+                if (a.starred === b.starred) return a.id - b.id;
+                return b.starred - a.starred;
+            });
+        }
+
+        render();
+        sortBookmarks();
+
+        // 추가 버튼 클릭 이벤트
         addBtn.addEventListener('click', () => {
+            // 입력값에서 앞뒤 공백 제거
             const name = nameInput.value.trim();
             const url = urlInput.value.trim();
+            const category = categoryInput.value.trim();
+
             if (name && url) {
-                bookmarks.push({ id: Date.now(), name, url, starred: false });
+                // 새 북마크 객체 생성 후 bookmarks 배열에 추가
+                bookmarks.push({ id: Date.now(), name, url, category, starred: false });
                 localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
                 render();
+
+                // 입력 필드 초기화
                 nameInput.value = '';
                 urlInput.value = '';
+                categoryInput.value = '';
             }
         });
 
-        // TODO 4: 이벤트 위임 — list에 click 1개로 별표 토글 / 삭제 / 사이트명 클릭 시 window.open
+        // 북마크 리스트 클릭 이벤트 (이벤트 위임)
         list.addEventListener('click', (e) => {
-            // 클릭된 요소가 li 내부인지 확인 (별표, 삭제 버튼, 사이트명 모두 li 내부에 있음)
             const li = e.target.closest('li'); // 클릭된 요소에서 가장 가까운 li 요소 찾기
             if (!li) return; // li 요소가 아닌 곳 클릭 시 무시
 
-            const id = Number(li.dataset.id);
-            const bookmark = bookmarks.find(bookmark => bookmark.id === id);
+            const id = Number(li.dataset.id); // li의 data-id 속성에서 id 가져오기
+            const bookmark = bookmarks.find(bookmark => bookmark.id === id); // 해당 id의 북마크 객체 찾기
 
+            // 별표 클릭: starred 토글
             if (e.target.classList.contains('star')) {
-                // 별표 클릭: starred 토글 + 저장 + 렌더링
-                bookmark.starred = !bookmark.starred;
-                localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-                render();
-            } else if (e.target.classList.contains('delete-btn')) {
-                // 삭제 버튼 클릭: bookmarks에서 제거 + 저장 + 렌더링
+                bookmark.starred = !bookmark.starred; // 토글
+                sortBookmarks(); // starred가 true인 항목이 먼저 오도록 정렬
+            }
+            // 삭제 버튼 클릭: bookmarks에서 제거
+            else if (e.target.classList.contains('delete-btn')) {
                 bookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
-                localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-                render();
-            } else if (e.target.classList.contains('name')) {
-                // 사이트명 클릭: window.open으로 새 탭에서 열기
+            }
+            // 사이트명 클릭: 새 탭에서 링크 열기
+            else if (e.target.classList.contains('name')) {
                 window.open(bookmark.url, '_blank');
             }
+
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            render();
+        });
+
+        // URL 벨리데이션 및 경고 (http:// 또는 https://로 시작하지 않는 경우)
+        urlInput.addEventListener('input', () => {
+            const url = urlInput.value.trim();
+            const isValid = url && /^https?:\/\//i.test(url);
+
+            urlInput.style.outlineColor = isValid ? '' : 'red'; // 유효하지 않으면 빨간색으로 강조
+        });
+
+        // URL 자동 보완 기능 (urlInput에서 포커스가 벗어날 때)
+        urlInput.addEventListener('blur', () => {
+            const url = urlInput.value.trim();
+            if (url && !/^https?:\/\//i.test(url)) {
+                urlInput.value = 'http://' + url; // http:// 자동 보완
+                urlInput.style.outlineColor = ''; // 보완 후에는 기본 색상으로 설정
+            }
+        });
+
+        // 검색 입력 이벤트: 입력된 검색어로 북마크 필터링 (이름 또는 URL에 검색어가 포함된 항목만 표시)
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            // 검색어가 없으면 전체 북마크를 렌더링
+            if (!searchTerm) {
+                render();
+            } else { // 있으면 필터링된 북마크를 렌더링
+                const filteredBookmarks = bookmarks.filter(({ name, url }) =>
+                    name.toLowerCase().includes(searchTerm) // 이름에 검색어 포함 여부
+                    || url.toLowerCase().includes(searchTerm) // URL에 검색어 포함 여부
+                );
+                // 필터링된 북마크 표시
+                list.innerHTML = renderItems(filteredBookmarks);
+            }
+
         });
     </script>
 </body>

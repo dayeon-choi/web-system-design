@@ -10,7 +10,6 @@
             padding: 2rem;
             max-width: 600px;
             margin: 0 auto;
-
         }
 
         textarea {
@@ -40,25 +39,14 @@
     </div>
     <button id="clearButton">지우기</button>
 
-    <script>
+    <script lang="javascript">
         const textarea = document.querySelector('#memoText');
         const charEl = document.querySelector('#charCount');
         const wordEl = document.querySelector('#wordCount');
         const clearButton = document.querySelector('#clearButton');
 
-        // 글자 수와 단어 수를 계산해 화면에 표시하는 함수 (공통 코드 함수로 분리)
-        const setMemoMetrics = (memo) => {
-            console.log(memo)
-            const text = memo;
-            charEl.textContent = text.length;
-            wordEl.textContent = text.trim().split(/\s+/).filter(w => w).length; // 단어 수 계산 (공백으로 분리 후 빈 문자열 제거)
-            console.log(text.trim().split(/\s + /).filter(w => w))
-
-            updateCharCountColor(text.length); // 글자 수에 따라 색상 업데이트
-        };
-
         // 글자 수에 따라 색상을 변경하는 함수
-        const updateCharCountColor = (charCount) => {
+        const updateCharCountColor = charCount => {
             if (charCount >= 200) {
                 charEl.style.color = 'red';
                 textarea.style.borderColor = 'red';
@@ -69,7 +57,16 @@
                 textarea.style.borderColor = '#ccc';
                 textarea.style.outlineColor = '#ccc';
             }
-        };
+        }
+
+        // 글자 수와 단어 수를 계산해 화면에 표시하는 함수 (공통 코드 함수로 분리)
+        const setMemoMetrics = memo => {
+            const text = memo;
+            charEl.textContent = text.length;
+            wordEl.textContent = text.trim().split(/\s+/).filter(w => w).length; // 단어 수 계산 (공백으로 분리 후 빈 문자열 제거)
+
+            updateCharCountColor(text.length); // 글자 수에 따라 색상 업데이트
+        }
 
         // 페이지 로드 시 localStorage에서 저장된 글 복원
         const savedMemo = localStorage.getItem('memo');
