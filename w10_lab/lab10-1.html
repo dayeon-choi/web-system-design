@@ -10,6 +10,7 @@
             padding: 2rem;
             max-width: 600px;
             margin: 0 auto;
+
         }
 
         textarea {
@@ -17,6 +18,10 @@
             min-height: 200px;
             padding: 0.5rem;
             font-size: 1rem;
+        }
+
+        textarea:focus {
+            outline: solid 2px #ccc;
         }
 
         .count {
@@ -33,17 +38,59 @@
     <div class="count">
         글자: <span id="charCount">0</span> · 단어: <span id="wordCount">0</span>
     </div>
+    <button id="clearButton">지우기</button>
 
     <script>
         const textarea = document.querySelector('#memoText');
         const charEl = document.querySelector('#charCount');
         const wordEl = document.querySelector('#wordCount');
+        const clearButton = document.querySelector('#clearButton');
 
-        // TODO 1: 페이지 로드 시 localStorage에서 저장된 글 복원
-        //         힌트: localStorage.getItem('memo'), textarea.value = ...
+        // 글자 수와 단어 수를 계산해 화면에 표시하는 함수 (공통 코드 함수로 분리)
+        const setMemoMetrics = (memo) => {
+            console.log(memo)
+            const text = memo;
+            charEl.textContent = text.length;
+            wordEl.textContent = text.trim().split(/\s+/).filter(w => w).length; // 단어 수 계산 (공백으로 분리 후 빈 문자열 제거)
+            console.log(text.trim().split(/\s + /).filter(w => w))
 
-        // TODO 2: textarea의 input 이벤트로 글자/단어 수 갱신 + localStorage 저장
-        //         힌트: text.length (글자 수), text.trim().split(/\s+/).filter(w => w).length (단어 수)
+            updateCharCountColor(text.length); // 글자 수에 따라 색상 업데이트
+        };
+
+        // 글자 수에 따라 색상을 변경하는 함수
+        const updateCharCountColor = (charCount) => {
+            if (charCount >= 200) {
+                charEl.style.color = 'red';
+                textarea.style.borderColor = 'red';
+                textarea.style.borderColor = 'red';
+                textarea.style.outlineColor = 'red';
+            } else {
+                charEl.style.color = '#666';
+                textarea.style.borderColor = '#ccc';
+                textarea.style.outlineColor = '#ccc';
+            }
+        };
+
+        // 페이지 로드 시 localStorage에서 저장된 글 복원
+        const savedMemo = localStorage.getItem('memo');
+        if (savedMemo) {
+            textarea.value = savedMemo;
+            setMemoMetrics(savedMemo);
+        }
+
+        // textarea에 입력된 글자 수와 단어 수를 계산해 화면에 표시하는 이벤트 리스너 (입력 시마다 업데이트)
+        textarea.addEventListener('input', () => {
+            const text = textarea.value;
+            localStorage.setItem('memo', text); // 입력된 글 localStorage에 저장
+            setMemoMetrics(text);
+        });
+
+        // 지우기 버튼 클릭 시 textarea 내용과 카운터 초기화
+        clearButton.addEventListener('click', () => {
+            textarea.value = '';
+            localStorage.removeItem('memo');
+            setMemoMetrics('');
+        });
     </script>
 </body>
 
