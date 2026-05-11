@@ -45,17 +45,20 @@
         const textarea = document.querySelector('#memoText');
         const charEl = document.querySelector('#charCount');
         const wordEl = document.querySelector('#wordCount');
+        const countEl = document.querySelector('.count');
         const clearButton = document.querySelector('#clearButton');
 
         // 글자 수에 따라 색상을 변경하는 함수
         const updateCharCountColor = charCount => {
             if (charCount >= 200) {
-                charEl.style.color = 'red';
+                countEl.style.color = 'red';
+                countEl.style.fontWeight = 'bold';
                 textarea.style.borderColor = 'red';
                 textarea.style.borderColor = 'red';
                 textarea.style.outlineColor = 'red';
             } else {
-                charEl.style.color = '#666';
+                countEl.style.color = '#666';
+                countEl.style.fontWeight = 'normal';
                 textarea.style.borderColor = '#ccc';
                 textarea.style.outlineColor = '#ccc';
             }
