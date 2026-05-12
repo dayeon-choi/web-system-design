@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>글자 수 카운터</title>
+    <title>글자 수 카운터 - 2510741 최다연</title>
     <style>
         body {
             font-family: sans-serif;
@@ -81,7 +81,7 @@
         const setMemoMetrics = memo => {
             const text = memo;
             charEl.textContent = text.length;
-            wordEl.textContent = text.trim().split(/\s+/).filter(w => w).length; // 단어 수 계산 (공백으로 분리 후 빈 문자열 제거)
+            wordEl.textContent = text.trim().split(/\s+/).filter(w => w).length; // 단어 수 계산 (연속된 공백 문자까지 1개의 공백으로 처리 및 분리 후 빈 문자열 제거)
 
             updateCharCountColor(text.length); // 글자 수에 따라 색상 업데이트
         }

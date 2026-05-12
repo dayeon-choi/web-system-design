@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>북마크 매니저</title>
+    <title>북마크 매니저 - 2510741 최다연</title>
     <style>
         body {
             font-family: sans-serif;
@@ -147,6 +147,7 @@
                 if (!acc[category]) acc[category] = [];
                 acc[category].push(bookmark);
                 return acc;
+
             }, {});
 
             list.innerHTML = Object.entries(grouped).map(([category, items]) => `
@@ -248,29 +249,29 @@
 
         // 드래그 앤 드롭 관련 함수: 같은 카테고리 내에서 항목 순서 변경
         const moveBookmarkToCategoryPosition = (sourceId, targetId) => {
-            const sourceIndex = bookmarks.findIndex((bookmark) => bookmark.id === sourceId);
-            const targetIndex = bookmarks.findIndex((bookmark) => bookmark.id === targetId);
+            const sourceIndex = bookmarks.findIndex(({ id }) => id === sourceId);
+            const targetIndex = bookmarks.findIndex(({ id }) => id === targetId);
             if (sourceIndex === -1 || targetIndex === -1) return; // 유효하지 않은 ID인 경우 함수 종료
 
             const [movedBookmark] = bookmarks.splice(sourceIndex, 1);
-            const adjustedTargetIndex = bookmarks.findIndex((bookmark) => bookmark.id === targetId);
-            bookmarks.splice(adjustedTargetIndex, 0, movedBookmark);
+            const adjustedTargetIndex = bookmarks.findIndex(({ id }) => id === targetId);
+            bookmarks.splice(adjustedTargetIndex, 0, movedBookmark); // 삽입 위치, 삭제 없음, 삽입할 요소
         }
 
         // 카테고리 끝으로 이동하는 함수: 드롭 위치가 항목이 아닌 카테고리 영역인 경우 해당 카테고리의 마지막으로 이동
         const moveBookmarkToCategoryEnd = (sourceId, category) => {
-            const sourceIndex = bookmarks.findIndex((bookmark) => bookmark.id === sourceId);
+            const sourceIndex = bookmarks.findIndex(({ id }) => id === sourceId);
             if (sourceIndex === -1) return;
 
             // 이동할 북마크를 배열에서 제거하고, 같은 카테고리 내에서 마지막 위치를 찾아 그 뒤에 삽입
             const [movedBookmark] = bookmarks.splice(sourceIndex, 1);
-            const targetCategoryBookmark = [...bookmarks].reverse().find((bookmark) => (bookmark.category || '미분류') === category);
+            const targetCategoryBookmark = [...bookmarks].reverse().find((bookmark) => (bookmark.category || '미분류') === category); // 가장 뒤에 있는 같은 카테고리 항목 찾기
 
             if (targetCategoryBookmark) {
                 const lastIndex = bookmarks.findIndex((bookmark) => bookmark.id === targetCategoryBookmark.id);
                 bookmarks.splice(lastIndex + 1, 0, movedBookmark);
             } else {
-                bookmarks.push(movedBookmark);
+                bookmarks.push(movedBookmark); // 같은 카테고리 항목이 없는 경우 배열 끝에 추가
             }
         }
 
@@ -278,6 +279,7 @@
         list.addEventListener('dragstart', (e) => {
             const li = e.target.closest('li');
             if (!li) return;
+
             const categoryList = li.closest('ul[data-category]');
             if (!categoryList) return;
 
@@ -329,10 +331,10 @@
                 const targetId = Number(targetLi.dataset.id);
                 // 드롭 위치가 항목인 경우: 같은 카테고리 내에서 순서 변경
                 if (dragSourceId !== null && dragSourceId !== targetId) {
-                    moveBookmarkToCategoryPosition(dragSourceId, targetId);
+                    moveBookmarkToCategoryPosition(dragSourceId, targetId); // 드래그한 항목과 드롭 위치의 항목이 다를 때만 이동 처리
                 }
             } else {
-                moveBookmarkToCategoryEnd(dragSourceId, categoryList.dataset.category);
+                moveBookmarkToCategoryEnd(dragSourceId, categoryList.dataset.category); // 드롭 위치가 카테고리 영역인 경우: 해당 카테고리의 마지막으로 이동
             }
 
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
