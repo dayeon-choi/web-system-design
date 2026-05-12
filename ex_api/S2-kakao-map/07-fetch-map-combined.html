@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <title>S2-07 · fetch + 지도 결합 (학생 배포 — mock fetch)</title>
   <style>
-    body { font-family: system-ui, sans-serif; padding: 24px; }
-    #map { width: 100%; max-width: 900px; height: 550px; border: 1px solid #ddd; border-radius: 6px; }
-    #status { color: #555; min-height: 1.4em; }
-    .info { background: #e7f3ff; padding: 8px 12px; border-left: 4px solid #2196f3;
-            font-size: 13px; border-radius: 4px; margin-bottom: 8px; }
-    .err { background: #fee; padding: 8px 12px; border-left: 4px solid #c00; }
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 24px;
+    }
+
+    #map {
+      width: 100%;
+      max-width: 900px;
+      height: 550px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    #status {
+      color: #555;
+      min-height: 1.4em;
+    }
+
+    .info {
+      background: #e7f3ff;
+      padding: 8px 12px;
+      border-left: 4px solid #2196f3;
+      font-size: 13px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .err {
+      background: #fee;
+      padding: 8px 12px;
+      border-left: 4px solid #c00;
+    }
   </style>
 </head>
+
 <body>
   <h1>S2-07 · 측정소를 지도 위에 ⭐ <small>(학생 배포용)</small></h1>
   <p>슬라이드: <b>결합 패턴 — 실전 코드</b> · "같은 fetch, 다른 시각화"</p>
@@ -29,9 +57,9 @@
   <script>
     // 실제 API로 바꾸려면 두 줄 변경
     const USE_REAL_FETCH = false;
-    const AIR_API_KEY    = '여기에_공공데이터_일반인증키';
-    const REAL_ENDPOINT  = 'https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList';
-    const MOCK_URL       = './mock/stations.json';
+    const AIR_API_KEY = '여기에_공공데이터_일반인증키';
+    const REAL_ENDPOINT = 'https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList';
+    const MOCK_URL = './mock/stations.json';
 
     if (window._noConfig || !window.KAKAO_JS_KEY || window.KAKAO_JS_KEY.includes('붙여넣기')) {
       document.getElementById('hint').innerHTML = '<div class="err">⚠️ config.js에 카카오 JS 키 필요.</div>';
@@ -100,4 +128,5 @@
     }
   </script>
 </body>
+
 </html>

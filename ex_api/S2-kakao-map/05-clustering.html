@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <title>S2-05 · 클러스터링 (라이브 데모 3)</title>
   <style>
-    body { font-family: system-ui, sans-serif; padding: 24px; }
-    #map { width: 100%; max-width: 800px; height: 500px; border: 1px solid #ddd; border-radius: 6px; }
-    .err { background: #fee; padding: 8px 12px; border-left: 4px solid #c00; }
-    button { padding: 6px 12px; cursor: pointer; }
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 24px;
+    }
+
+    #map {
+      width: 100%;
+      max-width: 800px;
+      height: 500px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .err {
+      background: #fee;
+      padding: 8px 12px;
+      border-left: 4px solid #c00;
+    }
+
+    button {
+      padding: 6px 12px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
   <h1>S2-05 · 마커 30개 + 클러스터링</h1>
   <p>슬라이드: <b>클러스터링</b> · 가까운 마커끼리 묶어 보여주기. 줌 인하면 풀림.</p>
@@ -55,8 +76,9 @@
       clusterer.addMarkers(markers);
 
       document.getElementById('zoomOut').onclick = () => map.setLevel(map.getLevel() + 1);
-      document.getElementById('zoomIn').onclick  = () => map.setLevel(Math.max(1, map.getLevel() - 1));
+      document.getElementById('zoomIn').onclick = () => map.setLevel(Math.max(1, map.getLevel() - 1));
     }
   </script>
 </body>
+
 </html>
